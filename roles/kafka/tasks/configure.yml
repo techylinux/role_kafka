@@ -1,0 +1,23 @@
+---
+ # Setup server.properties
+  - name: create server.properties
+    template: 
+      dest: "{{ kafka_install_link_dir }}/config/server.properties"
+      src: server.properties.j2
+      mode: 640 
+    notify:
+      - restart kafka
+  - name: create systemd service file
+    template:
+      src: kafka.service.j2
+      dest: /etc/systemd/system/kafka.service
+      owner: root
+      group: root
+    notify:
+    - reload daemon service
+  - name: ensure that kafka is started 
+    systemd: 
+      name: kafka.service
+      state: started
+      enabled: yes 
+    

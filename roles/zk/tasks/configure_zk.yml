@@ -1,0 +1,27 @@
+---
+  - name: Zookeeper | Create config files from template
+    template:
+      src: "{{ item.template }}"
+      dest: "{{ item.dest }}{{ item.name }}"
+    with_items:
+      - template: "zookeeper.properties.j2"
+        name: "zookeeper.properties"
+        dest: "{{ kafka_install_link_dir }}/config/zookeeper.properties"
+      - template: "zk_myid.j2"
+        name: "myid"
+        dest: "{{ zookeeper_data_dir }}/"
+    notify:
+       - restart zk
+  - name: create systemd service file
+    template:
+      src: zookeeper.service.j2
+      dest: /etc/systemd/system/zookeeper.service
+      owner: root
+      group: root
+    notify:
+      - reload daemon service
+  - name: ensure that zk is started
+    systemd:
+      name: zookeeper.service
+      state: started
+      enabled: yes

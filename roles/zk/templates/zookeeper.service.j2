@@ -1,0 +1,10 @@
+[Unit]
+Requires=network.target remote-fs.target
+After=network.target remote-fs.target
+
+[Service]
+Type=simple
+ExecStart= '{{ kafka_install_parent_dir }}'/kafka/bin/zookeeper-server-start.sh '{{ kafka_install_parent_dir }}'/kafka/config/zookeeper.properties
+ExecStop='{{ kafka_install_parent_dir }}'/kafka/bin/zookeeper-server-stop.sh
+[Install]
+WantedBy=multi-user.target

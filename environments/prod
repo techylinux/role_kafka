@@ -1,0 +1,9 @@
+[kafka-server]
+client-1
+client-2
+client-3
+[zk-server]
+client-4
+client-5
+client-6
+

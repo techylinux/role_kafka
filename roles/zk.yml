@@ -1,0 +1,6 @@
+---
+  - name: zookeeper server playbook
+    hosts: zk-server
+    become: true
+    roles:
+      - zk

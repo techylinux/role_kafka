@@ -1,0 +1,6 @@
+---
+  - name: kafka server playbook
+    hosts: kafka-servers
+    become: true
+    roles:
+      - kafka

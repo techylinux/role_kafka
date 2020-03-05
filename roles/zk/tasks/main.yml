@@ -1,0 +1,4 @@
+---
+# tasks file for zk
+  - import_tasks: install_jdk_zk.yml  
+  - import_tasks: configure_zk.yml 

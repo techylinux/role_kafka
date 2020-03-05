@@ -1,0 +1,30 @@
+---
+# defaults file for kafka
+kafka_download_timeout_seconds: 600
+kafka_install_parent_dir: /opt/downloads
+kafka_latest_release: 2.4.0
+kafka_ver: 2.11-2.4.0
+kafka_file_name: kafka_{{ kafka_ver }}.tgz
+kafka_name: kafka_{{ kafka_ver }}
+kafka_install_dir: '{{ kafka_install_parent_dir }}/{{ kafka_name }}'
+kafka_install_link_dir: '{{ kafka_install_parent_dir }}/kafka'
+kafka_mirror: https://downloads.apache.org/kafka/{{ kafka_latest_release }}/kafka_{{ kafka_ver }}.tgz
+
+
+##################################### KAFKA PROPERTIES ################################
+kafka_hosts: "{{ansible_fqdn}}:9092"
+
+num_network_threads: 2
+num_io_threads: 2
+num_partitions: 2
+socket_send_buffer_bytes: 1048576
+socket_receive_buffer_bytes: 1048576
+socket_request_max_bytes: 104857600
+log_flush_interval_messages: 10000
+log_flush_interval_ms: 1000
+log_retention_bytes: 104857600  #100 M
+log_retention_hours: 24
+log_segment_bytes: "{{kafka_log_retention_bytes}}"
+kafka_heap_opts: "-Xmx1G -Xms1G"
+kafka_ip: "{{ ansible_all_ipv4_addresses | first }}"
+kafka_plaintext_port: 9092

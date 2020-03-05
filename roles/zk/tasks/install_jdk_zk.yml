@@ -1,0 +1,35 @@
+---
+  - name: install the jdk-8
+    yum: name=java-1.8.0-openjdk state=present
+    when: ansible_os_family == "RedHat"
+
+  - name: install the jdk-8
+    apt: pkg=java-1.8.0-openjdk state=present
+    when: ansible_os_family == "Debian"
+  - name: check & create downloads dir
+    file:
+      path: '{{ zk_install_parent_dir }}' 
+      state: directory
+      mode: 0755
+  - name: Check if zk is already installed
+    stat:
+      path: '{{ zk_install_parent_dir }}/zookeeper-{{ zk_ver }}'
+    register: zk_installed
+  - name: download kafka binaries
+    get_url:
+      url: '{{ zk_mirror }}'
+      dest: '{{ zk_install_parent_dir }}/{{ zk_file_name }}'
+    when: zk_installed.stats.exists != True 
+  - name: Unarchieve zk binaries
+    unarchive:
+      src: '{{ zk_install_parent_dir }}/{{ zk_file_name }}'
+      dest: '{{ zk_install_parent_dir }}'
+      copy: no
+    when: zk_installed.stats.exists != True
+  - name: link
+    file:
+      src: '{{ zk_install_dir }}' 
+      dest: '{{ zk_install_link_dir }}'
+      state: link
+
+  

@@ -1,0 +1,35 @@
+---
+  - name: install the jdk-8
+    yum: name=java-1.8.0-openjdk state=present
+    when: ansible_os_family == "RedHat"
+
+  - name: install the jdk-8
+    apt: pkg=java-1.8.0-openjdk state=present
+    when: ansible_os_family == "Debian"
+  - name: check & create downloads dir
+    file:
+      path: '{{ kafka_install_parent_dir }}' 
+      state: directory
+      mode: 0755
+  - name: Check if kafka is already installed
+    stat:
+      path: '{{ kafka_install_parent_dir }}/kafka_{{ kafka_ver }}'
+    register: kafka_installed
+  - name: download kafka binaries
+    get_url:
+      url: '{{ kafka_mirror }}'
+      dest: '{{ kafka_install_parent_dir }}/{{ kafka_file_name }}'
+    when: kafka_installed.stats.exists != True 
+  - name: Unarchieve kafka binaries
+    unarchive:
+      src: '{{ kafka_install_parent_dir }}/{{ kafka_file_name }}'
+      dest: '{{ kafka_install_parent_dir }}'
+      copy: no
+    when: kafka_installed.stats.exists != True
+  - name: link
+    file:
+      src: '{{ kafka_install_dir }}' 
+      dest: '{{ kafka_install_link_dir }}'
+      state: link
+
+  

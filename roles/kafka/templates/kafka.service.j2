@@ -1,0 +1,15 @@
+[Unit]
+Description=Kafka Daemon
+After=zookeeper.service
+
+[Service]
+Type=simple
+User=kafka
+Group=kafka
+LimitNOFILE=32768
+Restart=on-failure
+Environment="KAFKA_HEAP_OPTS={{ kafka_heap_opts }}"
+ExecStart= '{{ kafka_install_parent_dir }}'/kafka/bin/kafka-server-start.sh '{{ kafka_install_parent_dir }}'/kafka/config/server.properties
+ExecStop='{{ kafka_install_parent_dir }}'/kafka/bin/kafka-server-stop.sh
+[Install]
+WantedBy=multi-user.target
